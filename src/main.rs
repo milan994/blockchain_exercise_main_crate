@@ -1,10 +1,17 @@
 use blockchain_simulator;
+use blockchain_client_server;
 
 #[tokio::main]
 async fn main() {
-    println!("Starting program...\n");
 
-    blockchain_simulator::fn_blockchain_simulator_main().await;
+    // Initialize logging
+    tracing_subscriber::fmt::init();
 
-    println!("Main - Test\n");
+    tracing::info!("Starting both programs: blockchain_simulator and blockchain_client_server\n");
+
+    let jh_sim = blockchain_simulator::fn_blockchain_simulator_main();
+
+    let jh_client_server = blockchain_client_server::blockchain_client_http_server_main();
+
+    let _ = tokio::join!(jh_sim, jh_client_server);
 }
